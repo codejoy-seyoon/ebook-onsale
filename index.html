@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>C Coaching — Co-Elevate Your Community | John Yoon</title>
+<meta name="description" content="C Coaching — The first framework for community coaching, rooted in Korean philosophy and the ancient wisdom of humanity. A new way of leading, living, and weaving community." />
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Co-Elevate Your Community with C Coaching" />
+<meta property="og:description" content="The first framework for community coaching, rooted in Korean philosophy and ancient wisdom of humanity." />
+<meta property="og:image" content="assets/cover.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --hanji:        #f4ecdd;
+    --hanji-2:      #efe4cf;
+    --paper:        #faf5ea;
+    --ink:          #211d17;
+    --ink-soft:     #4a443b;
+    --line:         #e0d4bd;
+    --blue:         #2f3f96;
+    --green:        #2b8355;
+    --gold:         #f0a81c;
+    --orange:       #e5571a;
+    --orange-deep:  #cc4a12;
+    --shadow:       0 24px 60px -24px rgba(40,30,10,.45);
+    --radius:       18px;
+    --maxw:         1120px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--ink);
+    background-color: var(--hanji);
+    background-image:
+      radial-gradient(1200px 700px at 15% -10%, rgba(255,255,255,.55), transparent 60%),
+      radial-gradient(900px 600px at 100% 0%, rgba(240,168,28,.10), transparent 55%),
+      radial-gradient(1000px 800px at 50% 120%, rgba(47,63,150,.06), transparent 60%);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  h1, h2, h3, .serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: .2px;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Top bar ---------- */
+  header.topbar {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: rgba(244,236,221,.82);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .brand { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.35rem; letter-spacing: 2px; }
+  .brand b { color: var(--orange); }
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--orange); color: #fff; font-weight: 600; font-size: .9rem;
+    padding: 10px 20px; border-radius: 999px;
+    transition: transform .15s ease, background .2s ease;
+  }
+  .nav-cta:hover { background: var(--orange-deep); transform: translateY(-1px); }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 68px 0 40px; }
+  .hero .wrap {
+    display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center;
+  }
+  .eyebrow {
+    display: inline-block; font-size: .78rem; font-weight: 600; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--orange-deep);
+    background: rgba(229,87,26,.10); padding: 7px 14px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .hero h1 { font-size: clamp(2.5rem, 5.2vw, 4.05rem); margin-bottom: 20px; }
+  .hero h1 .accent { color: var(--orange); }
+  .hero .sub {
+    font-size: 1.16rem; color: var(--ink-soft); max-width: 34ch; margin-bottom: 30px;
+    font-family: 'Cormorant Garamond', serif; font-weight: 500; font-style: italic;
+    letter-spacing: .3px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange); color: #fff; font-weight: 600; font-size: 1.05rem;
+    padding: 16px 32px; border-radius: 999px; box-shadow: 0 14px 30px -12px rgba(229,87,26,.7);
+    transition: transform .16s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-primary:hover { background: var(--orange-deep); transform: translateY(-2px); box-shadow: 0 20px 38px -12px rgba(229,87,26,.8); }
+  .btn-primary svg { width: 18px; height: 18px; }
+  .deliver-inline { font-size: .86rem; color: var(--ink-soft); max-width: 22ch; }
+
+  .hero-visual { position: relative; display: flex; justify-content: center; }
+  .hero-visual::before {
+    content: ""; position: absolute; inset: -8% -6% -6% -6%;
+    background: radial-gradient(closest-side, rgba(240,168,28,.28), transparent 72%);
+    z-index: 0;
+  }
+  .hero-visual img {
+    position: relative; z-index: 1; width: 100%; max-width: 400px; height: auto;
+    border-radius: 8px; box-shadow: var(--shadow);
+    transform: rotate(-2deg);
+    transition: transform .4s ease;
+  }
+  .hero-visual img:hover { transform: rotate(0deg) translateY(-4px); }
+
+  /* ---------- Intro band ---------- */
+  .intro-band { padding: 30px 0 8px; text-align: center; }
+  .intro-band p {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600;
+    font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.25; color: var(--ink);
+    max-width: 20ch; margin: 0 auto;
+  }
+  .rule {
+    width: 120px; height: 1px; margin: 34px auto 0;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    position: relative;
+  }
+  .rule::after {
+    content: "◆"; color: var(--orange); font-size: .7rem;
+    position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+    background: var(--hanji); padding: 0 8px;
+  }
+
+  /* ---------- Body / three C's ---------- */
+  section { padding: 64px 0; }
+  .section-head { text-align: center; max-width: 60ch; margin: 0 auto 46px; }
+  .section-head h2 { font-size: clamp(1.9rem, 4vw, 2.75rem); margin-bottom: 16px; }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; }
+
+  .lead-copy {
+    max-width: 62ch; margin: 0 auto 52px; text-align: center;
+    font-size: 1.18rem; color: var(--ink-soft);
+  }
+  .lead-copy strong { color: var(--ink); font-weight: 600; }
+
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .pillar {
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 34px 28px; text-align: center;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .pillar:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgba(40,30,10,.4); }
+  .pillar .dot { width: 46px; height: 46px; border-radius: 50%; margin: 0 auto 18px; position: relative; }
+  .pillar .dot::after {
+    content: ""; position: absolute; inset: 12px; border-radius: 50%; background: var(--paper);
+  }
+  .pillar:nth-child(1) .dot { background: var(--blue); }
+  .pillar:nth-child(2) .dot { background: var(--gold); }
+  .pillar:nth-child(3) .dot { background: var(--green); }
+  .pillar h3 { font-size: 1.65rem; margin-bottom: 10px; }
+  .pillar:nth-child(1) h3 { color: var(--blue); }
+  .pillar:nth-child(2) h3 { color: #c98708; }
+  .pillar:nth-child(3) h3 { color: var(--green); }
+  .pillar p { font-size: .98rem; color: var(--ink-soft); }
+
+  /* ---------- Inside the book ---------- */
+  .inside { background: linear-gradient(180deg, rgba(255,255,255,.4), rgba(255,255,255,0)); }
+  .inside-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .inside-list { list-style: none; display: grid; gap: 16px; }
+  .inside-list li {
+    display: flex; gap: 14px; align-items: flex-start;
+    font-size: 1.05rem; color: var(--ink);
+  }
+  .inside-list li span.mk {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(229,87,26,.12); color: var(--orange-deep);
+    display: grid; place-items: center; font-size: .8rem; font-weight: 700; margin-top: 3px;
+  }
+  .inside-visual img {
+    width: 100%; height: auto; border-radius: var(--radius);
+    filter: drop-shadow(0 26px 40px rgba(40,30,10,.28));
+  }
+
+  /* ---------- Audience ---------- */
+  .audience { text-align: center; }
+  .audience h2 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); margin-bottom: 30px; }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 720px; margin: 0 auto; }
+  .chip {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 999px;
+    padding: 12px 24px; font-weight: 500; font-size: 1rem; color: var(--ink);
+  }
+  .chip b { color: var(--orange-deep); font-weight: 600; }
+
+  /* ---------- Final CTA ---------- */
+  .cta-final { text-align: center; }
+  .cta-card {
+    background: linear-gradient(160deg, #2a3a8c 0%, #26306f 100%);
+    color: #fff; border-radius: 26px; padding: 62px 34px;
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .cta-card::before {
+    content: ""; position: absolute; width: 320px; height: 320px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(240,168,28,.5), transparent 70%);
+    top: -120px; right: -80px;
+  }
+  .cta-card::after {
+    content: ""; position: absolute; width: 280px; height: 280px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(43,131,85,.45), transparent 70%);
+    bottom: -120px; left: -70px;
+  }
+  .cta-card > * { position: relative; z-index: 1; }
+  .cta-card h2 { font-size: clamp(2rem, 4.4vw, 3rem); margin-bottom: 14px; color: #fff; }
+  .cta-card p.k { color: rgba(255,255,255,.82); font-size: 1.1rem; max-width: 40ch; margin: 0 auto 32px; }
+  .btn-buy {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--orange); color: #fff; font-weight: 600; font-size: 1.2rem;
+    padding: 20px 46px; border-radius: 999px;
+    box-shadow: 0 18px 40px -12px rgba(229,87,26,.9);
+    transition: transform .16s ease, background .2s ease;
+  }
+  .btn-buy:hover { background: var(--orange-deep); transform: translateY(-2px) scale(1.02); }
+  .btn-buy svg { width: 22px; height: 22px; }
+
+  .deliver-note {
+    margin-top: 26px; display: inline-flex; flex-direction: column; gap: 4px;
+    color: rgba(255,255,255,.9); font-size: .95rem;
+    background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18);
+    padding: 14px 24px; border-radius: 14px;
+  }
+  .deliver-note .en { color: rgba(255,255,255,.7); font-size: .85rem; }
+  .deliver-note .mail-ic { display: inline-block; margin-right: 8px; }
+  .deliver-note .support {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.16);
+    color: rgba(255,255,255,.72); font-size: .82rem; line-height: 1.6;
+  }
+  .deliver-note .support a { color: var(--gold); font-weight: 600; text-decoration: underline; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    text-align: center; padding: 54px 0 60px; border-top: 1px solid var(--line);
+    margin-top: 20px;
+  }
+  footer .author { font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700; }
+  footer .imprint { letter-spacing: 4px; font-size: .78rem; color: var(--ink-soft); margin-top: 6px; text-transform: uppercase; }
+  footer .fine { margin-top: 22px; font-size: .82rem; color: var(--ink-soft); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .hero .wrap { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .hero .eyebrow { margin-top: 8px; }
+    .hero .sub { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+    .hero-visual { order: -1; }
+    .hero-visual img { max-width: 300px; }
+    .pillars { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+    .inside-grid { grid-template-columns: 1fr; gap: 36px; }
+    .inside-visual { max-width: 360px; margin: 0 auto; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 18px; }
+    .hero { padding: 44px 0 24px; }
+    .nav-cta { padding: 9px 16px; font-size: .84rem; }
+    .cta-card { padding: 46px 22px; }
+    .btn-buy { width: 100%; justify-content: center; padding: 18px 24px; }
+    .deliver-inline { max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Top bar ===== -->
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><b>C</b> COACHING</div>
+    <a class="nav-cta" href="https://global.bnikoreastore.com/surl/O/848">Buy the Ebook</a>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow">The First Framework for Community Coaching</span>
+      <h1>Co-Elevate Your Community with <span class="accent">C Coaching</span></h1>
+      <p class="sub">The first framework for community coaching, rooted in Korean philosophy and the ancient wisdom of humanity.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="https://global.bnikoreastore.com/surl/O/848">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
+          Buy the Ebook
+        </a>
+        <span class="deliver-inline">Delivered as a PDF to your email in up to 1 hour after purchase.</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="assets/cover.png" alt="C Coaching book cover — Co-elevate your community with C Coaching by John Yoon" />
+    </div>
+  </div>
+</section>
+
+<!-- ===== Intro band ===== -->
+<div class="intro-band">
+  <div class="wrap">
+    <p>A new way of leading, living, and weaving community.</p>
+    <div class="rule"></div>
+  </div>
+</div>
+
+<!-- ===== Body / three C's ===== -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>A quiet revolution in how we lead</h2>
+    </div>
+    <p class="lead-copy">
+      In a world shaped by disconnection, competition, and burnout, C Coaching offers a quiet revolution.
+      This book moves beyond performance and productivity — into
+      <strong>Consciousness, Care, and Conversing</strong>.
+      Rooted in ancient Asian wisdom and modern systemic practices, it equips leaders, coaches, and
+      changemakers with tools to elevate not only individuals, but whole communities.
+    </p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="dot"></div>
+        <h3>Consciousness</h3>
+        <p>Lead from awareness and deep presence, not pressure or performance.</p>
+      </div>
+      <div class="pillar">
+        <div class="dot"></div>
+        <h3>Care</h3>
+        <p>Hold and elevate whole communities — not just guide individuals.</p>
+      </div>
+      <div class="pillar">
+        <div class="dot"></div>
+        <h3>Conversing</h3>
+        <p>Master the language and patterns that weave people together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Inside the book ===== -->
+<section class="inside">
+  <div class="wrap">
+    <div class="inside-grid">
+      <div class="inside-copy">
+        <div class="section-head" style="text-align:left; margin:0 0 30px;">
+          <h2>Inside the book</h2>
+          <p>Tools, language, and deep presence for those ready to transform their organization into a vibrant community.</p>
+        </div>
+        <ul class="inside-list">
+          <li><span class="mk">1</span> The triangle of community coaching</li>
+          <li><span class="mk">2</span> The ten principles of community building</li>
+          <li><span class="mk">3</span> The eight patterns of relationship</li>
+          <li><span class="mk">4</span> The secret of master communicators</li>
+          <li><span class="mk">★</span> An invitation to join the movement of creating the future of humanity</li>
+        </ul>
+      </div>
+      <div class="inside-visual">
+        <img src="assets/mockup.jpg" alt="C Coaching ebook shown on tablet, phone, and in print" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Audience ===== -->
+<section class="audience">
+  <div class="wrap">
+    <h2>Who this book is for</h2>
+    <div class="chips">
+      <span class="chip">For <b>parents</b></span>
+      <span class="chip"><b>coaches</b></span>
+      <span class="chip"><b>facilitators</b></span>
+      <span class="chip"><b>entrepreneurs</b></span>
+      <span class="chip">&amp; <b>changemakers</b></span>
+    </div>
+    <p class="lead-copy" style="margin-top:34px;">
+      C Coaching is your invitation to become a guardian of transformation — in self, in system, and in soul.
+    </p>
+  </div>
+</section>
+
+<!-- ===== Final CTA ===== -->
+<section class="cta-final">
+  <div class="wrap">
+    <div class="cta-card">
+      <h2>Begin the movement.</h2>
+      <p class="k">Get the complete C Coaching ebook and start co-elevating your community today.</p>
+      <a class="btn-buy" href="https://global.bnikoreastore.com/surl/O/848">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
+        Buy the Ebook
+      </a>
+      <div class="deliver-note">
+        <span><span class="mail-ic">✉️</span>After your payment is confirmed, the PDF ebook will be emailed in up to 1 hour (during business hours).</span>
+        <span class="support">Paid but didn’t receive it? Contact <a href="mailto:info@bnikorea.com">info@bnikorea.com</a>.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="wrap">
+    <div class="author">John Yoon</div>
+    <div class="imprint">Coachingtown</div>
+    <p class="fine">© 2026 Coachingtown · C Coaching. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
