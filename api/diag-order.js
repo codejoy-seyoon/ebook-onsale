@@ -5,7 +5,7 @@
 
 import { getValidAccessToken, readLastWebhook } from '../lib/tokens.js';
 
-const DIAG_VERSION = 5; // 배포 반영 확인용 마커
+const DIAG_VERSION = 6; // 배포 반영 확인용 마커
 const MALL_ID = process.env.CAFE24_MALL_ID;
 const API_VERSION = process.env.CAFE24_API_VERSION || '2026-03-01';
 const BASE = `https://${MALL_ID}.cafe24api.com`;
@@ -46,6 +46,32 @@ export default async function handler(req, res) {
       accessToken
     );
     out.list = { status: listRes.status, body: listRes.body.slice(0, 400) };
+
+    // 주문 폴링 설계용 프로브: 최근 N일 주문을 embed=items,buyer 로 받아 상품번호/이메일 구조 확인
+    if (req.query.probe === 'orders') {
+      const days = Math.min(parseInt(req.query.days || '7', 10) || 7, 90);
+      const s2 = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+      const pr = await callCafe24(
+        `/api/v2/admin/orders?start_date=${fmt(s2)}&end_date=${fmt(end)}&embed=items,buyer&limit=20`,
+        accessToken
+      );
+      out.probe = { status: pr.status };
+      try {
+        const orders = JSON.parse(pr.body).orders || [];
+        const mask = (e) => (e && e.includes('@') ? e.replace(/(.).*(@.*)/, '$1***$2') : e);
+        out.probe.count = orders.length;
+        out.probe.orders = orders.map((o) => ({
+          order_id: o.order_id,
+          shop_no: o.shop_no,
+          paid: o.paid,
+          buyer_email: mask(o.buyer?.email || null),
+          items: (o.items || []).map((it) => ({ product_no: it.product_no, name: it.product_name })),
+        }));
+      } catch (e) {
+        out.probe.parse_error = String(e);
+        out.probe.raw = pr.body.slice(0, 800);
+      }
+    }
 
     // order_id 를 주면 단일 주문 조회. embed 로 연락처 포함 여부 확인.
     if (req.query.order_id) {
