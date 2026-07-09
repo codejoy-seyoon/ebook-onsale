@@ -8,6 +8,7 @@
 // 5분마다 외부 스케줄러(GitHub Actions 등)가 호출한다.
 
 import { getValidAccessToken, alreadySent, markSent } from '../lib/tokens.js';
+import { getOrder } from '../lib/cafe24.js';
 import { sendEbookEmail } from '../lib/mailer.js';
 
 const MALL_ID = process.env.CAFE24_MALL_ID;
@@ -68,6 +69,22 @@ export default async function handler(req, res) {
 
   try {
     const accessToken = await getValidAccessToken();
+
+    // [검증용] 실제 결제완료 주문 1건을 조회해 전체 발송체인(주문조회→구매자확인→PDF발송)을
+    // 실결제 없이 시험한다. to 를 주면 구매자 대신 그 주소로 보냄(실고객 미발송). markSent 안 함.
+    if (req.query.test_order_id) {
+      const order = await getOrder(accessToken, req.query.test_order_id);
+      const to = req.query.to || pickEmail(order);
+      const t = { order_id: req.query.test_order_id, paid: order?.paid, to: to ? to.replace(/(.).*(@.*)/, '$1***$2') : null };
+      if (!isPaid(order)) { t.result = 'not paid (skip)'; }
+      else if (!to) { t.result = 'no email'; }
+      else if (dry) { t.result = 'dry-run (would send)'; }
+      else { await sendEbookEmail({ to, name: pickName(order) }); t.result = 'sent'; }
+      summary.test = t;
+      res.status(200).json(summary);
+      return;
+    }
+
     // 테스트 override (토큰 보호): 넓은 기간/다른 몰 확인용. dry-run 에서만 의미.
     const opts = {};
     if (req.query.days) opts.days = Math.min(parseInt(req.query.days, 10) || SCAN_DAYS, 90);
