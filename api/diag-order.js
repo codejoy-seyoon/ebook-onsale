@@ -5,7 +5,7 @@
 
 import { getValidAccessToken, readLastWebhook } from '../lib/tokens.js';
 
-const DIAG_VERSION = 4; // 배포 반영 확인용 마커
+const DIAG_VERSION = 5; // 배포 반영 확인용 마커
 const MALL_ID = process.env.CAFE24_MALL_ID;
 const API_VERSION = process.env.CAFE24_API_VERSION || '2026-03-01';
 const BASE = `https://${MALL_ID}.cafe24api.com`;

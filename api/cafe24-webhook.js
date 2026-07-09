@@ -26,12 +26,12 @@ function pickEmail(order) {
   const first = (arr, key) =>
     Array.isArray(arr) ? arr.map((x) => x?.[key]).find(Boolean) : null;
   return (
+    order.buyer?.email || // embed=buyer 로 오는 실제 구매자 이메일 (주 경로)
     order.buyer_email ||
     order.member_email ||
     order.order_email ||
     order.email ||
     first(order.receivers, 'email') ||
-    first(order.items, 'buyer_email') ||
     null
   );
 }
@@ -41,6 +41,7 @@ function pickName(order) {
   const first = (arr, key) =>
     Array.isArray(arr) ? arr.map((x) => x?.[key]).find(Boolean) : null;
   return (
+    order.buyer?.name ||
     order.buyer_name ||
     order.billing_name ||
     order.member_name ||
