@@ -47,23 +47,32 @@ export default async function handler(req, res) {
     );
     out.list = { status: listRes.status, body: listRes.body.slice(0, 400) };
 
-    // order_id 를 주면 단일 주문의 실제 필드명을 추려서 반환
+    // order_id 를 주면 단일 주문 조회. embed 로 연락처 포함 여부 확인.
     if (req.query.order_id) {
+      const embed = req.query.embed ? `?embed=${encodeURIComponent(req.query.embed)}` : '';
       const single = await callCafe24(
-        `/api/v2/admin/orders/${encodeURIComponent(req.query.order_id)}`,
+        `/api/v2/admin/orders/${encodeURIComponent(req.query.order_id)}${embed}`,
         accessToken
       );
-      out.single = { status: single.status };
+      out.single = { status: single.status, embed: req.query.embed || null };
       try {
-        const order = JSON.parse(single.body).order || {};
-        out.single.all_keys = Object.keys(order);
-        const picked = {};
-        for (const k of Object.keys(order)) {
-          if (/email|name|buyer|receiver|orderer|paid|order_id|member/i.test(k)) {
-            picked[k] = order[k];
+        const parsed = JSON.parse(single.body);
+        const order = parsed.order || {};
+        out.single.top_level_keys = Object.keys(order);
+        // 응답 전체에서 이메일('@' 포함 문자열)이 담긴 경로를 재귀로 찾는다
+        const emails = [];
+        const walk = (node, path) => {
+          if (node == null) return;
+          if (typeof node === 'string') {
+            if (/@/.test(node) && /\./.test(node)) emails.push({ path, value: node });
+          } else if (Array.isArray(node)) {
+            node.forEach((v, i) => walk(v, `${path}[${i}]`));
+          } else if (typeof node === 'object') {
+            for (const k of Object.keys(node)) walk(node[k], path ? `${path}.${k}` : k);
           }
-        }
-        out.single.candidate_fields = picked;
+        };
+        walk(parsed, '');
+        out.single.emails_found = emails;
       } catch (e) {
         out.single.parse_error = String(e);
         out.single.raw = single.body.slice(0, 1500);
