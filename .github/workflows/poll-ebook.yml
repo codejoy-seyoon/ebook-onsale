@@ -1,0 +1,22 @@
+name: ebook-fulfillment-poll
+
+# 5분마다 Cafe24 영문몰(shop2) 결제완료 ebook 주문을 확인해 자동 발송한다.
+# (웹훅 대신 폴링 — 주문당 1회 멱등 발송)
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {} # 수동 실행(테스트)용
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poll Cafe24 orders and fulfill ebook
+        run: |
+          code=$(curl -sS -m 90 -o /tmp/out.json -w "%{http_code}" \
+            -H "x-poll-token: ${{ secrets.POLL_TOKEN }}" \
+            "https://www.c-coachingtown.com/api/poll-orders")
+          echo "HTTP $code"
+          cat /tmp/out.json || true
+          echo
+          test "$code" = "200"
