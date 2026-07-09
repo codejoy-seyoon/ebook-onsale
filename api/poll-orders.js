@@ -8,7 +8,6 @@
 // 5분마다 외부 스케줄러(GitHub Actions 등)가 호출한다.
 
 import { withCafe24Token, alreadySent, markSent } from '../lib/tokens.js';
-import { getOrder } from '../lib/cafe24.js';
 import { sendEbookEmail } from '../lib/mailer.js';
 
 const MALL_ID = process.env.CAFE24_MALL_ID;
@@ -32,14 +31,12 @@ function pickName(o) {
   return o?.buyer?.name || o?.buyer_name || o?.billing_name || 'Customer';
 }
 
-async function listEbookOrders(accessToken, opts = {}) {
-  const shopNo = opts.shop || EBOOK_SHOP_NO;
-  const days = opts.days || SCAN_DAYS;
+async function listEbookOrders(accessToken) {
   const end = new Date(Date.now() + 24 * 60 * 60 * 1000); // 타임존 여유로 +1일
-  const start = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const start = new Date(Date.now() - SCAN_DAYS * 24 * 60 * 60 * 1000);
   const fmt = (d) => d.toISOString().slice(0, 10);
   const url =
-    `${BASE}/api/v2/admin/orders?shop_no=${shopNo}` +
+    `${BASE}/api/v2/admin/orders?shop_no=${EBOOK_SHOP_NO}` +
     `&start_date=${fmt(start)}&end_date=${fmt(end)}` +
     `&embed=items,buyer&limit=100`;
   const res = await fetch(url, {
@@ -68,34 +65,8 @@ export default async function handler(req, res) {
   const summary = { at: new Date().toISOString(), dry, shop_no: EBOOK_SHOP_NO, product_no: EBOOK_PRODUCT_NO, scanned: 0, candidates: [], sent: [], skipped: [], errors: [] };
 
   try {
-    // [검증용] 실제 결제완료 주문 1건을 조회해 전체 발송체인(주문조회→구매자확인→PDF발송)을
-    // 실결제 없이 시험한다. to 를 주면 구매자 대신 그 주소로 보냄(실고객 미발송). markSent 안 함.
-    if (req.query.test_order_id) {
-      const order = await withCafe24Token((t) => getOrder(t, req.query.test_order_id));
-      const to = req.query.to || pickEmail(order);
-      const t = { order_id: req.query.test_order_id, paid: order?.paid, to: to ? to.replace(/(.).*(@.*)/, '$1***$2') : null };
-      if (!isPaid(order)) { t.result = 'not paid (skip)'; }
-      else if (!to) { t.result = 'no email'; }
-      else if (dry) { t.result = 'dry-run (would send)'; }
-      else { await sendEbookEmail({ to, name: pickName(order) }); t.result = 'sent'; }
-      summary.test = t;
-      res.status(200).json(summary);
-      return;
-    }
-
-    // 테스트 override (토큰 보호): 넓은 기간/다른 몰 확인용. dry-run 에서만 의미.
-    const opts = {};
-    if (req.query.days) opts.days = Math.min(parseInt(req.query.days, 10) || SCAN_DAYS, 90);
-    if (req.query.shop) opts.shop = parseInt(req.query.shop, 10) || EBOOK_SHOP_NO;
-    const orders = await withCafe24Token((t) => listEbookOrders(t, opts));
+    const orders = await withCafe24Token((t) => listEbookOrders(t));
     summary.scanned = orders.length;
-    // 진단: ebook 필터 없이 전체 주문의 상품번호 분포도 보여줌(dry 전용)
-    if (dry && req.query.debug === '1') {
-      summary.all_orders = orders.slice(0, 30).map((o) => ({
-        order_id: o.order_id, shop_no: o.shop_no, paid: o.paid,
-        products: (o.items || []).map((it) => parseInt(it.product_no, 10)),
-      }));
-    }
 
     for (const o of orders) {
       if (!isPaid(o) || !hasEbook(o)) continue;
