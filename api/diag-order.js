@@ -44,10 +44,26 @@ export default async function handler(req, res) {
 
     // 2) order_id 를 주면 운영 경로(단일 주문 조회)를 그대로 시험
     if (req.query.order_id) {
-      out.single = await callCafe24(
+      const single = await callCafe24(
         `/api/v2/admin/orders/${encodeURIComponent(req.query.order_id)}`,
         accessToken
       );
+      out.single = { path: single.path, status: single.status };
+      // 잘림 없이 이메일/이름/결제 관련 필드만 추려서 반환
+      try {
+        const order = JSON.parse(single.body).order || {};
+        out.single.all_keys = Object.keys(order);
+        const picked = {};
+        for (const k of Object.keys(order)) {
+          if (/email|name|buyer|receiver|orderer|paid|order_id|member/i.test(k)) {
+            picked[k] = order[k];
+          }
+        }
+        out.single.candidate_fields = picked;
+      } catch (e) {
+        out.single.parse_error = String(e);
+        out.single.raw = single.body;
+      }
     }
 
     res.status(200).json(out);
