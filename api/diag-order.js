@@ -19,7 +19,7 @@ async function callCafe24(path, accessToken) {
     },
   });
   const text = await res.text();
-  return { path, status: res.status, body: text.slice(0, 2000) };
+  return { path, status: res.status, body: text };
 }
 
 export default async function handler(req, res) {
@@ -37,10 +37,11 @@ export default async function handler(req, res) {
     const end = new Date();
     const start = new Date(end.getTime() - 30 * 24 * 60 * 60 * 1000);
     const fmt = (d) => d.toISOString().slice(0, 10);
-    out.list = await callCafe24(
+    const listRes = await callCafe24(
       `/api/v2/admin/orders?start_date=${fmt(start)}&end_date=${fmt(end)}&limit=3`,
       accessToken
     );
+    out.list = { path: listRes.path, status: listRes.status, body: listRes.body.slice(0, 800) };
 
     // 2) order_id 를 주면 운영 경로(단일 주문 조회)를 그대로 시험
     if (req.query.order_id) {
