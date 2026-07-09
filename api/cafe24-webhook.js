@@ -56,9 +56,11 @@ function isPaid(order) {
 }
 
 export default async function handler(req, res) {
-  // Cafe24 는 POST 로 이벤트를 보냄
+  // Cafe24 는 결제 이벤트를 POST 로 보낸다.
+  // 단, 등록 시 URL 검증(GET/HEAD)이나 브라우저 접속에는 200 으로 응답해
+  // "Method Not Allowed" 로 등록이 막히지 않게 한다. (실제 발송은 POST 에서만)
   if (req.method !== 'POST') {
-    res.status(405).send('Method Not Allowed');
+    res.status(200).send('cafe24-webhook alive (POST only for events)');
     return;
   }
 
