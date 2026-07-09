@@ -254,6 +254,28 @@
   footer .imprint { letter-spacing: 4px; font-size: .78rem; color: var(--ink-soft); margin-top: 6px; text-transform: uppercase; }
   footer .fine { margin-top: 22px; font-size: .82rem; color: var(--ink-soft); }
 
+  /* ---------- Price / special offer ---------- */
+  .offer-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green); color: #fff;
+    font-size: .72rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+    padding: 7px 15px; border-radius: 999px; margin-bottom: 18px;
+    box-shadow: 0 10px 22px -12px rgba(43,131,85,.8);
+  }
+  .offer-badge svg { width: 14px; height: 14px; }
+  .price-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
+  .price-now { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 2.7rem; color: var(--orange); line-height: 1; }
+  .price-was { font-size: 1.2rem; color: var(--ink-soft); text-decoration: line-through; opacity: .8; }
+  .price-off {
+    background: rgba(43,131,85,.14); color: var(--green); font-weight: 700;
+    font-size: .82rem; letter-spacing: .4px; padding: 5px 11px; border-radius: 999px;
+  }
+  /* on the dark CTA card */
+  .cta-card .price-row { justify-content: center; }
+  .cta-card .price-now { color: var(--gold); }
+  .cta-card .price-was { color: rgba(255,255,255,.62); }
+  .cta-card .price-off { background: rgba(240,168,28,.18); color: var(--gold); }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 900px) {
     .hero .wrap { grid-template-columns: 1fr; gap: 40px; text-align: center; }
@@ -293,6 +315,15 @@
       <span class="eyebrow">The First Framework for Community Coaching</span>
       <h1>Co-Elevate Your Community with <span class="accent">C Coaching</span></h1>
       <p class="sub">The first framework for community coaching, rooted in Korean philosophy and the ancient wisdom of humanity.</p>
+      <span class="offer-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.2" fill="currentColor"/></svg>
+        Special Offer · Vietnam Conference
+      </span>
+      <div class="price-row">
+        <span class="price-now">$18.5</span>
+        <span class="price-was">$37</span>
+        <span class="price-off">50% OFF</span>
+      </div>
       <div class="hero-actions">
         <a class="btn-primary" href="https://global.bnikoreastore.com/surl/O/848">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
@@ -395,6 +426,15 @@
     <div class="cta-card">
       <h2>Begin the movement.</h2>
       <p class="k">Get the complete C Coaching ebook and start co-elevating your community today.</p>
+      <span class="offer-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.2" fill="currentColor"/></svg>
+        Special Offer for Participants at the Vietnam Conference
+      </span>
+      <div class="price-row">
+        <span class="price-now">$18.5</span>
+        <span class="price-was">$37</span>
+        <span class="price-off">50% OFF</span>
+      </div>
       <a class="btn-buy" href="https://global.bnikoreastore.com/surl/O/848">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
         Buy the Ebook
