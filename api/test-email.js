@@ -24,16 +24,10 @@ export default async function handler(req, res) {
 
   try {
     const result = await sendEbookEmail({ to, name: req.query.name || 'Test' });
-    const kb = Math.round((result.bytes || 0) / 1024);
-    const diag =
-      `\n--- 진단 ---` +
-      `\nPDF_BLOB_PATHNAME = ${JSON.stringify(process.env.PDF_BLOB_PATHNAME || null)}` +
-      `\nPDF_SOURCE_URL 설정됨? ${process.env.PDF_SOURCE_URL ? 'YES → ' + process.env.PDF_SOURCE_URL : 'no'}` +
-      `\n첨부 크기 = ${kb} KB (${result.bytes || 0} bytes)  [옛 파일≈473KB / 새 파일≈2390KB]`;
     res
       .status(200)
       .send(
-        `✅ 발송 완료 → ${to} (PDF 첨부: ${result.attached ? '있음' : '없음 — PDF_BLOB_PATHNAME/PDF_SOURCE_URL 미설정'})${diag}`
+        `✅ 발송 완료 → ${to} (PDF 첨부: ${result.attached ? '있음' : '없음 — PDF_BLOB_PATHNAME/PDF_SOURCE_URL 미설정'})`
       );
   } catch (e) {
     console.error('[test-email] 발송 실패:', e);
