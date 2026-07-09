@@ -7,7 +7,7 @@
 //
 // 5분마다 외부 스케줄러(GitHub Actions 등)가 호출한다.
 
-import { getValidAccessToken, alreadySent, markSent } from '../lib/tokens.js';
+import { withCafe24Token, alreadySent, markSent } from '../lib/tokens.js';
 import { getOrder } from '../lib/cafe24.js';
 import { sendEbookEmail } from '../lib/mailer.js';
 
@@ -68,12 +68,10 @@ export default async function handler(req, res) {
   const summary = { at: new Date().toISOString(), dry, shop_no: EBOOK_SHOP_NO, product_no: EBOOK_PRODUCT_NO, scanned: 0, candidates: [], sent: [], skipped: [], errors: [] };
 
   try {
-    const accessToken = await getValidAccessToken();
-
     // [검증용] 실제 결제완료 주문 1건을 조회해 전체 발송체인(주문조회→구매자확인→PDF발송)을
     // 실결제 없이 시험한다. to 를 주면 구매자 대신 그 주소로 보냄(실고객 미발송). markSent 안 함.
     if (req.query.test_order_id) {
-      const order = await getOrder(accessToken, req.query.test_order_id);
+      const order = await withCafe24Token((t) => getOrder(t, req.query.test_order_id));
       const to = req.query.to || pickEmail(order);
       const t = { order_id: req.query.test_order_id, paid: order?.paid, to: to ? to.replace(/(.).*(@.*)/, '$1***$2') : null };
       if (!isPaid(order)) { t.result = 'not paid (skip)'; }
@@ -89,7 +87,7 @@ export default async function handler(req, res) {
     const opts = {};
     if (req.query.days) opts.days = Math.min(parseInt(req.query.days, 10) || SCAN_DAYS, 90);
     if (req.query.shop) opts.shop = parseInt(req.query.shop, 10) || EBOOK_SHOP_NO;
-    const orders = await listEbookOrders(accessToken, opts);
+    const orders = await withCafe24Token((t) => listEbookOrders(t, opts));
     summary.scanned = orders.length;
     // 진단: ebook 필터 없이 전체 주문의 상품번호 분포도 보여줌(dry 전용)
     if (dry && req.query.debug === '1') {
