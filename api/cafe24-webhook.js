@@ -3,9 +3,9 @@
 // 보안 원칙: 웹훅 본문을 그대로 믿지 않고, order_id 로 Admin API 를 다시 호출해
 // 실제 "결제완료" 주문인지 재검증한 뒤에만 발송한다. (위조 웹훅 방어)
 
-import { getValidAccessToken, markSent, alreadySent } from '../../lib/tokens.js';
-import { getOrder } from '../../lib/cafe24.js';
-import { sendEbookEmail } from '../../lib/mailer.js';
+import { getValidAccessToken, markSent, alreadySent } from '../lib/tokens.js';
+import { getOrder } from '../lib/cafe24.js';
+import { sendEbookEmail } from '../lib/mailer.js';
 
 // 웹훅 본문에서 order_id 를 최대한 견고하게 추출
 function extractOrderId(body) {
