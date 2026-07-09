@@ -31,12 +31,14 @@ function pickName(o) {
   return o?.buyer?.name || o?.buyer_name || o?.billing_name || 'Customer';
 }
 
-async function listEbookOrders(accessToken) {
+async function listEbookOrders(accessToken, opts = {}) {
+  const shopNo = opts.shop || EBOOK_SHOP_NO;
+  const days = opts.days || SCAN_DAYS;
   const end = new Date(Date.now() + 24 * 60 * 60 * 1000); // 타임존 여유로 +1일
-  const start = new Date(Date.now() - SCAN_DAYS * 24 * 60 * 60 * 1000);
+  const start = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
   const fmt = (d) => d.toISOString().slice(0, 10);
   const url =
-    `${BASE}/api/v2/admin/orders?shop_no=${EBOOK_SHOP_NO}` +
+    `${BASE}/api/v2/admin/orders?shop_no=${shopNo}` +
     `&start_date=${fmt(start)}&end_date=${fmt(end)}` +
     `&embed=items,buyer&limit=100`;
   const res = await fetch(url, {
@@ -66,8 +68,19 @@ export default async function handler(req, res) {
 
   try {
     const accessToken = await getValidAccessToken();
-    const orders = await listEbookOrders(accessToken);
+    // 테스트 override (토큰 보호): 넓은 기간/다른 몰 확인용. dry-run 에서만 의미.
+    const opts = {};
+    if (req.query.days) opts.days = Math.min(parseInt(req.query.days, 10) || SCAN_DAYS, 90);
+    if (req.query.shop) opts.shop = parseInt(req.query.shop, 10) || EBOOK_SHOP_NO;
+    const orders = await listEbookOrders(accessToken, opts);
     summary.scanned = orders.length;
+    // 진단: ebook 필터 없이 전체 주문의 상품번호 분포도 보여줌(dry 전용)
+    if (dry && req.query.debug === '1') {
+      summary.all_orders = orders.slice(0, 30).map((o) => ({
+        order_id: o.order_id, shop_no: o.shop_no, paid: o.paid,
+        products: (o.items || []).map((it) => parseInt(it.product_no, 10)),
+      }));
+    }
 
     for (const o of orders) {
       if (!isPaid(o) || !hasEbook(o)) continue;
