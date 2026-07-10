@@ -237,8 +237,13 @@
     background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18);
     padding: 14px 24px; border-radius: 14px;
   }
-  .deliver-note .en { color: rgba(255,255,255,.7); font-size: .85rem; }
+  .deliver-note .en { display: block; color: rgba(255,255,255,.7); font-size: .85rem; margin-top: 3px; }
   .deliver-note .mail-ic { display: inline-block; margin-right: 8px; }
+  .deliver-note .vn-note {
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.16);
+    color: var(--gold); font-weight: 600; font-size: .9rem; line-height: 1.55;
+  }
+  .deliver-note .vn-note .en { color: rgba(255,255,255,.72); font-weight: 400; }
   .deliver-note .support {
     margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.16);
     color: rgba(255,255,255,.72); font-size: .82rem; line-height: 1.6;
@@ -329,7 +334,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h2l2.4 12.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/></svg>
           Buy the Ebook
         </a>
-        <span class="deliver-inline">Delivered as a PDF to your email in up to 1 hour after purchase.</span>
+        <span class="deliver-inline">Delivered as a PDF to your email within 5 to 10 minutes after purchase.</span>
       </div>
     </div>
     <div class="hero-visual">
@@ -440,7 +445,8 @@
         Buy the Ebook
       </a>
       <div class="deliver-note">
-        <span><span class="mail-ic">✉️</span>After your payment is confirmed, the PDF ebook will be emailed in up to 1 hour (during business hours).</span>
+        <span><span class="mail-ic">✉️</span>After your payment is confirmed, the PDF ebook will be emailed within 5 to 10 minutes (during business hours).</span>
+        <span class="vn-note"><span class="mail-ic">🌏</span>A Vietnamese edition is also in production — buyers will receive it within 2 weeks.</span>
         <span class="support">Paid but didn’t receive it? Contact <a href="mailto:info@bnikorea.com">info@bnikorea.com</a>.</span>
       </div>
     </div>
